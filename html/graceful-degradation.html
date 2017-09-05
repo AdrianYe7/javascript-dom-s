@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>graceful degradation</title>
+    <script src="../js/graceful-degradation.js"></script>
+</head>
+<body>
+    <ul>
+        <li>
+            <a href="http://www.baidu.com" onclick="openWin(this.href);return false;">百度</a>
+        </li>
+        <li>
+            <a href="http://www.qq.com" onclick="openWin(this.href);return false;">腾讯</a>
+        </li>
+        <li>
+            <a href="http://www.alibabagroup.com" onclick="openWin(this.href);return false;">阿里</a>
+        </li>
+    </ul>
+
+<!--平稳退化：href中要写地址，防止禁用js的时候，链接仍然能够点击-->
+</body>
+</html>
