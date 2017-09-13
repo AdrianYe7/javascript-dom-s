@@ -1,11 +1,35 @@
 init(checkObject);
+init(createSlideShow);
 init(prepareSlideShow);
+
+function createSlideShow() {
+    var slideShow = document.createElement('div');
+    slideShow.setAttribute('id', 'slideshow');
+
+    var preview = document.createElement('img');
+    preview.setAttribute('src', '../images/mood.jpg');
+    preview.setAttribute('alt', 'mood');
+    preview.setAttribute('id', 'preview');
+
+    slideShow.appendChild(preview);
+
+    var linklist = document.getElementById('linklist');
+    insertAfter(slideShow, linklist);
+}
+
+function insertAfter(newElem, targetElem) {
+    var parentNode = targetElem.parentNode;
+    if(parentNode.lastChild == targetElem) {
+        parentNode.appendChild(newElem);
+    } else {
+        var nextSibling = targetElem.nextSibling;
+        parentNode.insertBefore(newElem, nextSibling);
+    }
+}
 
 function prepareSlideShow() {
     var preview = document.getElementById("preview");
     preview.style.position = 'absolute';
-    preview.style.left = '0px';
-    preview.style.top = '0px';
 
     var linklist = document.getElementById('linklist');
     var as = linklist.getElementsByTagName('a');
@@ -20,23 +44,32 @@ function prepareSlideShow() {
 
 function moveElement(elemId, targetX, targetY, interval) {
     var elemToMove = document.getElementById(elemId);
+    if(!elemToMove.style.left) elemToMove.style.left = '0px';
+    if(!elemToMove.style.top) elemToMove.style.top = '0px';
     var movingX = parseInt(elemToMove.style.left);
     var movingY = parseInt(elemToMove.style.top);
-    console.log(movingY + ":" +targetY);
-    console.log(movingX + ":" +targetX);
+
+    if(elemToMove.moveEvent) clearTimeout(elemToMove.moveEvent);
 
     if(movingY == targetY && movingX == targetX) return true;
-    if(movingX < targetX) movingX++;
-    if(movingX > targetX) movingX--;
-    if(movingY > targetY) movingY--;
-    if(movingY < targetY) movingY++;
-
+    // if(movingX < targetX) movingX++;
+    // if(movingX > targetX) movingX--;
+    // if(movingY > targetY) movingY--;
+    // if(movingY < targetY) movingY++;
+    if(movingX < targetX) movingX += Math.ceil((targetX - movingX)/10);
+    if(movingX > targetX) movingX -= Math.ceil((movingX - targetX)/10);
+    if(movingY < targetY) movingY += Math.ceil((targetY - movingY)/10);
+    if(movingY > targetY) movingY -= Math.ceil((movingY - targetY)/10);
+    /*
+    Math.ceil(number)    返回不小于number的最小整数
+    Math.round(number)   返回number的四舍五入整数
+    Math.floor(number)   返回不大于number的最大整数
+     */
     elemToMove.style.left = movingX + "px";
     elemToMove.style.top = movingY + "px";
 
     var repeat = "moveElement('" + elemId + "', " + targetX+ ", " + targetY + ", " + interval + ")";
-    console.log(repeat);
-    setTimeout(repeat, interval);
+    elemToMove.moveEvent = setTimeout(repeat, interval);
 }
 
 function checkObject() {
